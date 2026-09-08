@@ -127,10 +127,10 @@ document.addEventListener('touchend', e => {
 
 function handleGesture() {
   if (touchendX < touchstartX - 50) {
-    magazine.turn('next'); // Deslizar a la izquierda pasa página adelante
+    $('#magazine').turn('next'); // Deslizar a la izquierda pasa página adelante
   }
   if (touchendX > touchstartX + 50) {
-    magazine.turn('previous'); // Deslizar a la derecha retrocede
+    $('#magazine').turn('previous'); // Deslizar a la derecha retrocede
   }
 }
 // --- EFECTO 3D PARALLAX CON EL RATÓN ---

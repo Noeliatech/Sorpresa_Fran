@@ -56,6 +56,7 @@ p {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  touch-action: none; /* ¡MAGIA! Evita que el móvil intente hacer scroll al deslizar el dedo */
 }
 
 /* Forzamos renderizado por GPU al contenedor de la revista */
