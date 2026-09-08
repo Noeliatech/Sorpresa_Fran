@@ -1,15 +1,20 @@
 /* css/estilos.css */
 body {
-  background-color: #0f0f0f; /* Negro casi puro, muy cinematográfico */
+  background-color: #0f0f0f;
   color: #ffffff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  height: 100vh;
+
+  /* ESTO EVITA QUE LA PANTALLA COMPLETA ROMPA EL DISEÑO */
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Evita barras de desplazamiento */
+  overflow: hidden;
 }
 
 /* Títulos con toque dorado */

@@ -50,12 +50,12 @@ $(document).ready(function() {
   // Escuchamos los cambios de pantalla
   $(window).resize(adaptarPantalla);
 
-  // 3. Botón de entrada (LA CLAVE DEL ARREGLO)
+  // 3. Botón de entrada (LA CLAVE DEL ARREGLO PARA MÓVILES)
   $('#btn-entrar').click(function() {
     // Empieza la música
     document.getElementById('audio-fondo').play();
 
-    // Activar pantalla completa de forma nativa (Modo Cine)
+    // Activar pantalla completa
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen().catch(err => {});
@@ -63,46 +63,44 @@ $(document).ready(function() {
       elem.webkitRequestFullscreen();
     }
 
-    // Ocultamos la pantalla de carga
-    $('#pantalla-carga').fadeOut(800, function() {
+    // EL TRUCO: Le damos 500ms al móvil para que termine la animación de pantalla completa
+    // antes de crear la revista. Así las coordenadas del dedo no fallan.
+    setTimeout(function() {
+      $('#pantalla-carga').fadeOut(800, function() {
 
-      // TRUCO: Ponemos el contenedor visible en bloque, pero transparente (opacity 0)
-      $('#contenedor-revista').css({ display: 'flex', opacity: 0 });
+        $('#contenedor-revista').css({ display: 'flex', opacity: 0 });
 
-      // TRUCO INTELIGENTE: Detectar si es móvil para mostrar una o dos páginas
-      const esMovil = $(window).width() < 768;
+        const esMovil = $(window).width() < 768;
 
-      // AHORA inicializamos la revista
-      magazine.turn({
-        width: esMovil ? 400 : 800, // Ancho adaptado
-        height: 565,
-        display: esMovil ? 'single' : 'double', // Una página en móvil, dos en PC
-        acceleration: true,
-        gradients: true,
-        elevation: 50
+        // Inicializamos la revista
+        magazine.turn({
+          width: esMovil ? 400 : 800,
+          height: 565,
+          display: esMovil ? 'single' : 'double',
+          acceleration: true,
+          gradients: true,
+          elevation: 50
+        });
+
+        magazine.bind('turning', function(event, page, view) {
+          const audioPapel = document.getElementById('audio-pagina');
+          audioPapel.currentTime = 0;
+          let promesa = audioPapel.play();
+          if (promesa !== undefined) {
+            promesa.catch(error => { });
+          }
+          if (page === 54) {
+            const audioVoz = document.getElementById('audio-voz');
+            setTimeout(() => {
+              audioVoz.play().catch(e => {});
+            }, 1000);
+          }
+        });
+
+        adaptarPantalla();
+        $('#contenedor-revista').animate({ opacity: 1 }, 1000);
       });
-
-      // Añadimos el sonido de papel
-      magazine.bind('turning', function(event, page, view) {
-        const audioPapel = document.getElementById('audio-pagina');
-        audioPapel.currentTime = 0;
-        let promesa = audioPapel.play();
-        if (promesa !== undefined) {
-          promesa.catch(error => { /* Ignoramos si el navegador bloquea el audio rápido */ });
-        }
-        // SI LLEGA A LA ÚLTIMA PÁGINA (54), reproducimos tu mensaje de voz secreto
-        if (page === 54) {
-          const audioVoz = document.getElementById('audio-voz');
-          setTimeout(() => {
-            audioVoz.play().catch(e => {});
-          }, 1000); // Espera 1 segundo a que termine de abrirse la página
-        }
-      });
-
-      // Adaptamos el tamaño y mostramos la revista con un fundido suave
-      adaptarPantalla();
-      $('#contenedor-revista').animate({ opacity: 1 }, 1000);
-    });
+    }, 500); // <-- Los 500 milisegundos de espera mágica
   });
 
   // 4. Controles del teclado
