@@ -69,9 +69,14 @@ $(document).ready(function() {
       // TRUCO: Ponemos el contenedor visible en bloque, pero transparente (opacity 0)
       $('#contenedor-revista').css({ display: 'flex', opacity: 0 });
 
+      // TRUCO INTELIGENTE: Detectar si es móvil para mostrar una o dos páginas
+      const esMovil = $(window).width() < 768;
+
       // AHORA inicializamos la revista
       magazine.turn({
-        display: 'double',
+        width: esMovil ? 400 : 800, // Ancho adaptado
+        height: 565,
+        display: esMovil ? 'single' : 'double', // Una página en móvil, dos en PC
         acceleration: true,
         gradients: true,
         elevation: 50

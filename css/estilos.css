@@ -132,3 +132,26 @@ p {
   color: #000000;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
+
+/* AJUSTE RESPONSIVE MÓVIL PARA EL CONTENEDOR */
+@media screen and (max-width: 768px) {
+  #magazine {
+    width: 100% !important;
+    max-width: 400px;
+    height: auto;
+  }
+
+  #contenedor-revista h1 {
+    font-size: 1.3rem;
+    padding: 0 10px;
+  }
+
+  #contenedor-revista h2 {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+
+  #contenedor-revista p {
+    font-size: 0.85rem;
+  }
+}
