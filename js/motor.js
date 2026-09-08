@@ -1,9 +1,9 @@
-// js/motor.js
 $(document).ready(function() {
-  // Función para efecto máquina de escribir
+
+  // 1. FUNCIÓN MÁQUINA DE ESCRIBIR (Aduanas)
   function escribirTexto(elemento, texto, velocidad = 30) {
     let i = 0;
-    elemento.text(""); // Vaciamos el texto al empezar
+    elemento.text("");
     function mecanografiar() {
       if (i < texto.length) {
         elemento.text(elemento.text() + texto.charAt(i));
@@ -14,24 +14,24 @@ $(document).ready(function() {
     mecanografiar();
   }
 
-  // Lanzamos el efecto de escritura en el texto de aduanas nada más abrir la web
   const textoAduanas = "Ha habido un problema con aduanas y tu regalo físico está tardando más de lo previsto en llegar...";
   escribirTexto($('#texto-aduanas'), textoAduanas, 40);
-  // Transición de la broma de aduanas a la pantalla de cine
+
+  // Transición de aduanas a cine
   $('#btn-siguiente').click(function() {
     $('#pantalla-aduanas').fadeOut(800, function() {
       $('#pantalla-carga').fadeIn(800);
     });
   });
+
+  // 2. CONFIGURACIÓN DE LA REVISTA
   const magazine = $('#magazine');
   const totalPaginas = 54;
 
-  // 1. Cargar las páginas (usando Template Literals)
   for (let i = 1; i <= totalPaginas; i++) {
     magazine.append(`<div class="page" style="background-image:url('img/paginas/${i}.jpg');"></div>`);
   }
 
-  // 2. Función matemática de escala (Responsive)
   function adaptarPantalla() {
     const anchoVentana = $(window).width() * 0.9;
     const altoVentana = $(window).height() * 0.8;
@@ -47,15 +47,12 @@ $(document).ready(function() {
     });
   }
 
-  // Escuchamos los cambios de pantalla
   $(window).resize(adaptarPantalla);
 
-  // 3. Botón de entrada (LA CLAVE DEL ARREGLO PARA MÓVILES)
+  // 3. BOTÓN DE ENTRADA Y PANTALLA COMPLETA
   $('#btn-entrar').click(function() {
-    // Empieza la música
     document.getElementById('audio-fondo').play();
 
-    // Activar pantalla completa
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen().catch(err => {});
@@ -63,8 +60,6 @@ $(document).ready(function() {
       elem.webkitRequestFullscreen();
     }
 
-    // EL TRUCO: Le damos 500ms al móvil para que termine la animación de pantalla completa
-    // antes de crear la revista. Así las coordenadas del dedo no fallan.
     setTimeout(function() {
       $('#pantalla-carga').fadeOut(800, function() {
 
@@ -72,7 +67,6 @@ $(document).ready(function() {
 
         const esMovil = $(window).width() < 768;
 
-        // Inicializamos la revista
         magazine.turn({
           width: esMovil ? 400 : 800,
           height: 565,
@@ -100,10 +94,12 @@ $(document).ready(function() {
         adaptarPantalla();
         $('#contenedor-revista').animate({ opacity: 1 }, 1000);
       });
-    }, 500); // <-- Los 500 milisegundos de espera mágica
+    }, 500);
   });
 
-  // 4. Controles del teclado
+  // 4. CONTROLES DEFINITIVOS (Teclado, Ratón y Táctil Simple)
+
+  // Teclado (Flechas)
   $(document).keydown(function(e){
     if (e.keyCode == 37) {
       magazine.turn('previous');
@@ -111,68 +107,21 @@ $(document).ready(function() {
       magazine.turn('next');
     }
   });
-});
-// Soporte de gestos táctiles (Swipe izquierdo / derecho)
-let touchstartX = 0;
-let touchendX = 0;
 
-document.addEventListener('touchstart', e => {
-  touchstartX = e.changedTouches[0].screenX;
-}, false);
+  // Táctil infalible para móviles: Tocar los bordes de la pantalla
+  $('#contenedor-revista').on('click', function(e) {
+    const anchoVentana = $(window).width();
+    const posicionToque = e.pageX;
 
-document.addEventListener('touchend', e => {
-  touchendX = e.changedTouches[0].screenX;
-  handleGesture();
-}, false);
-
-function handleGesture() {
-  if (touchendX < touchstartX - 50) {
-    $('#magazine').turn('next'); // Deslizar a la izquierda pasa página adelante
-  }
-  if (touchendX > touchstartX + 50) {
-    $('#magazine').turn('previous'); // Deslizar a la derecha retrocede
-  }
-}
-// --- EFECTO 3D PARALLAX CON EL RATÓN ---
-const contenedor = $('#magazine');
-
-$(document).mousemove(function(e) {
-  // Obtenemos el ancho y alto de la ventana
-  const w = $(window).width();
-  const h = $(window).height();
-
-  // Calculamos la posición del ratón respecto al centro de la pantalla (valores entre -1 y 1)
-  const mouseX = (e.clientX - w / 2) / (w / 2);
-  const mouseY = (e.clientY - h / 2) / (h / 2);
-
-  // Definimos los grados máximos de inclinación (sutil para que sea elegante)
-  const maxRotation = 8;
-
-  const rotX = -mouseY * maxRotation;
-  const rotY = mouseX * maxRotation;
-
-  // Aplicamos la rotación 3D combinada con nuestra función de escala responsive
-  // Cogemos la escala actual que esté usando la revista para no romper el responsive
-  const anchoVentana = $(window).width() * 0.9;
-  const altoVentana = $(window).height() * 0.8;
-  let escala = Math.min(anchoVentana / 800, altoVentana / 565);
-  if (escala > 1) escala = 1;
-
-  contenedor.css({
-    'transform': `scale(${escala}) rotateX(${rotX}deg) rotateY(${rotY}deg)`,
-    'transform-origin': 'center center'
+    // Si toca en el 25% derecho de la pantalla, avanza.
+    if (posicionToque > anchoVentana * 0.75) {
+      magazine.turn('next');
+    }
+    // Si toca en el 25% izquierdo de la pantalla, retrocede.
+    else if (posicionToque < anchoVentana * 0.25) {
+      magazine.turn('previous');
+    }
+    // (El centro queda libre para que el ratón en PC pueda agarrar la página de forma natural)
   });
-});
 
-// Cuando el ratón sale de la ventana, la revista vuelve a su posición plana original
-$(document).mouseleave(function() {
-  const anchoVentana = $(window).width() * 0.9;
-  const altoVentana = $(window).height() * 0.8;
-  let escala = Math.min(anchoVentana / 800, altoVentana / 565);
-  if (escala > 1) escala = 1;
-
-  contenedor.css({
-    'transform': `scale(${escala}) rotateX(0deg) rotateY(0deg)`,
-    'transform-origin': 'center center'
-  });
 });
