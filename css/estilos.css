@@ -1,11 +1,15 @@
+/* css/estilos.css */
 body {
   background-color: #0f0f0f;
   color: #ffffff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
+
+  /* ESTO EVITA QUE LA PANTALLA COMPLETA ROMPA EL DISEÑO */
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,56 +17,142 @@ body {
   overflow: hidden;
 }
 
-h1, h2 { color: #d4af37; margin-bottom: 5px; text-align: center; }
-p { opacity: 0.8; margin-bottom: 20px; text-align: center; }
+/* Títulos con toque dorado */
+h1, h2 {
+  color: #d4af37;
+  margin-bottom: 5px;
+  text-align: center;
+}
 
+p {
+  opacity: 0.8;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* PANTALLA DE CARGA ÉPICA */
 #pantalla-carga {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-color: #000000;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   z-index: 1000;
+  /* Animación de latido */
   animation: pulso 2s infinite;
 }
 
-@keyframes pulso { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+@keyframes pulso {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
 
+/* CONTENEDOR PRINCIPAL */
 #contenedor-revista {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 100%; height: 100%;
-  touch-action: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  touch-action: none; /* ¡MAGIA! Evita que el móvil intente hacer scroll al deslizar el dedo */
 }
 
-/* Dejamos el contenedor totalmente limpio, el JS se encarga del resto */
-#magazine { margin: auto; position: relative; }
+/* Forzamos renderizado por GPU al contenedor de la revista */
+#magazine {
+  width: 800px;
+  height: 565px;
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+  transform-style: preserve-3d;
+  margin: auto; /* Centra automáticamente el contenedor */
 
+}
+
+/* AJUSTE DE CADA PÁGINA (Actualizado para corregir el fantasma central) */
 .page {
-  background-color: white; background-size: 100% 100%; background-repeat: no-repeat;
-  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  background-color: white;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
+/* DISEÑO DEL BOTÓN DE ENTRADA */
 #btn-entrar {
-  background-color: transparent; color: #d4af37; border: 2px solid #d4af37; padding: 15px 30px;
-  font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 20px;
-  transition: all 0.3s ease; border-radius: 5px; letter-spacing: 2px;
+  background-color: transparent;
+  color: #d4af37;
+  border: 2px solid #d4af37;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  letter-spacing: 2px;
 }
-#btn-entrar:hover { background-color: #d4af37; color: #000000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
 
-#pantalla-aduanas {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #000000; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; z-index: 1100; padding: 20px; text-align: center;
+#btn-entrar:hover {
+  background-color: #d4af37;
+  color: #000000;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
 }
-#pantalla-aduanas h2 { color: #ff4d4d; margin-bottom: 15px; }
+
+/* PANTALLA DE ADUANAS INICIAL */
+#pantalla-aduanas {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100; /* Por encima de todo */
+  padding: 20px;
+  text-align: center;
+}
+
+#pantalla-aduanas h2 {
+  color: #ff4d4d; /* Un toque de alerta rojo sutil para la broma */
+  margin-bottom: 15px;
+}
 
 #btn-siguiente {
-  background-color: transparent; color: #ffffff; border: 2px solid #ffffff; padding: 12px 25px;
-  font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 25px;
-  transition: all 0.3s ease; border-radius: 5px; letter-spacing: 1px;
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 12px 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  letter-spacing: 1px;
 }
-#btn-siguiente:hover { background-color: #ffffff; color: #000000; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
 
+#btn-siguiente:hover {
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+/* AJUSTE RESPONSIVE MÓVIL PARA EL CONTENEDOR */
 @media screen and (max-width: 768px) {
-  #contenedor-revista h1 { font-size: 1.3rem; padding: 0 10px; margin-top: 15px; }
-  #contenedor-revista h2 { font-size: 1rem; padding: 0 10px; margin-bottom: 15px; }
-  #contenedor-revista p { display: none; }
+  /* Hemos borrado la regla de #magazine de aquí para dejar que el JS la haga gigante */
+
+  #contenedor-revista h1 {
+    font-size: 1.3rem;
+    padding: 0 10px;
+  }
+
+  #contenedor-revista h2 {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+
+  #contenedor-revista p {
+    font-size: 0.85rem;
+  }
 }
