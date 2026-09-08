@@ -140,19 +140,18 @@ p {
 
 /* AJUSTE RESPONSIVE MÓVIL PARA EL CONTENEDOR */
 @media screen and (max-width: 768px) {
-  /* Hemos borrado la regla de #magazine de aquí para dejar que el JS la haga gigante */
-
   #contenedor-revista h1 {
     font-size: 1.3rem;
     padding: 0 10px;
   }
-
   #contenedor-revista h2 {
     font-size: 1rem;
     padding: 0 10px;
+    margin-bottom: 25px;
   }
 
+  /* Escondemos el texto en móviles para tener más pantalla para la foto */
   #contenedor-revista p {
-    font-size: 0.85rem;
+    display: none;
   }
 }

@@ -17,7 +17,6 @@ $(document).ready(function() {
   const textoAduanas = "Ha habido un problema con aduanas y tu regalo físico está tardando más de lo previsto en llegar...";
   escribirTexto($('#texto-aduanas'), textoAduanas, 40);
 
-  // Transición de aduanas a cine
   $('#btn-siguiente').click(function() {
     $('#pantalla-aduanas').fadeOut(800, function() {
       $('#pantalla-carga').fadeIn(800);
@@ -32,33 +31,40 @@ $(document).ready(function() {
     magazine.append(`<div class="page" style="background-image:url('img/paginas/${i}.jpg');"></div>`);
   }
 
-// 2. Función matemática de escala (Responsive Corregido)
+  // LA SOLUCIÓN DEFINITIVA PARA QUE SEA GIGANTE
   function adaptarPantalla() {
     const esMovil = $(window).width() < 768;
 
-    // En móvil usamos el 95% de la pantalla para que sea GIGANTE, en PC el 90%
-    const porcentajeAncho = esMovil ? 0.95 : 0.9;
-    const porcentajeAlto = esMovil ? 0.90 : 0.8;
+    if (esMovil) {
+      // Tomamos el 95% del ancho de la pantalla de tu móvil
+      const anchoGigante = $(window).width() * 0.95;
+      // Calculamos el alto para que mantenga las proporciones de tu foto
+      const altoGigante = anchoGigante * (565 / 400);
 
-    const anchoVentana = $(window).width() * porcentajeAncho;
-    const altoVentana = $(window).height() * porcentajeAlto;
+      // Le inyectamos las medidas exactas a la fuerza
+      if (magazine.turn('is')) {
+        magazine.turn('size', anchoGigante, altoGigante);
+      }
 
-    // LA CLAVE: Si es móvil, la base es 400. Si es PC, es 800.
-    const anchoRevista = esMovil ? 400 : 800;
-    const altoRevista = 565;
+      // Apagamos la escala CSS para que el móvil no la encoja dos veces
+      magazine.css({ 'transform': 'none' });
+    } else {
+      // En ordenador seguimos con la escala normal
+      const anchoVentana = $(window).width() * 0.9;
+      const altoVentana = $(window).height() * 0.8;
+      let escala = Math.min(anchoVentana / 800, altoVentana / 565);
+      if (escala > 1) escala = 1;
 
-    let escala = Math.min(anchoVentana / anchoRevista, altoVentana / altoRevista);
-    if (escala > 1) escala = 1;
-
-    magazine.css({
-      'transform': `scale(${escala})`,
-      'transform-origin': 'center center'
-    });
+      magazine.css({
+        'transform': `scale(${escala})`,
+        'transform-origin': 'center center'
+      });
+    }
   }
 
   $(window).resize(adaptarPantalla);
 
-  // 3. BOTÓN DE ENTRADA Y PANTALLA COMPLETA
+  // 3. INICIO DE LA REVISTA
   $('#btn-entrar').click(function() {
     document.getElementById('audio-fondo').play();
 
@@ -71,19 +77,19 @@ $(document).ready(function() {
 
     setTimeout(function() {
       $('#pantalla-carga').fadeOut(800, function() {
-
         $('#contenedor-revista').css({ display: 'flex', opacity: 0 });
 
         const esMovil = $(window).width() < 768;
 
+        // Medidas iniciales gigantes para el móvil
+        const anchoGigante = $(window).width() * 0.95;
+        const altoGigante = anchoGigante * (565 / 400);
+
         magazine.turn({
-          width: esMovil ? 400 : 800,
-          height: 565,
+          width: esMovil ? anchoGigante : 800,
+          height: esMovil ? altoGigante : 565,
           display: esMovil ? 'single' : 'double',
-
-          /* MAGIA: Si es móvil apaga el 3D, si es PC lo deja encendido */
           acceleration: esMovil ? false : true,
-
           gradients: true,
           elevation: 50
         });
@@ -92,14 +98,10 @@ $(document).ready(function() {
           const audioPapel = document.getElementById('audio-pagina');
           audioPapel.currentTime = 0;
           let promesa = audioPapel.play();
-          if (promesa !== undefined) {
-            promesa.catch(error => { });
-          }
+          if (promesa !== undefined) { promesa.catch(error => { }); }
           if (page === 54) {
             const audioVoz = document.getElementById('audio-voz');
-            setTimeout(() => {
-              audioVoz.play().catch(e => {});
-            }, 1000);
+            setTimeout(() => { audioVoz.play().catch(e => {}); }, 1000);
           }
         });
 
@@ -109,31 +111,17 @@ $(document).ready(function() {
     }, 500);
   });
 
-  // 4. CONTROLES DEFINITIVOS (Teclado, Ratón y Táctil Simple)
-
-  // Teclado (Flechas)
+  // 4. CONTROLES DE PASO DE PÁGINA
   $(document).keydown(function(e){
-    if (e.keyCode == 37) {
-      magazine.turn('previous');
-    } else if (e.keyCode == 39) {
-      magazine.turn('next');
-    }
+    if (e.keyCode == 37) magazine.turn('previous');
+    else if (e.keyCode == 39) magazine.turn('next');
   });
 
-  // Táctil infalible para móviles: Tocar los bordes de la pantalla
   $('#contenedor-revista').on('click', function(e) {
     const anchoVentana = $(window).width();
     const posicionToque = e.pageX;
-
-    // Si toca en el 25% derecho de la pantalla, avanza.
-    if (posicionToque > anchoVentana * 0.75) {
-      magazine.turn('next');
-    }
-    // Si toca en el 25% izquierdo de la pantalla, retrocede.
-    else if (posicionToque < anchoVentana * 0.25) {
-      magazine.turn('previous');
-    }
-    // (El centro queda libre para que el ratón en PC pueda agarrar la página de forma natural)
+    if (posicionToque > anchoVentana * 0.75) magazine.turn('next');
+    else if (posicionToque < anchoVentana * 0.25) magazine.turn('previous');
   });
 
 });
