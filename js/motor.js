@@ -22,57 +22,51 @@ $(document).ready(function() {
     magazine.append(`<div class="page" style="background-image:url('img/paginas/${i}.jpg');"></div>`);
   }
 
-  // 3. LA CLAVE: CALCULAR EL TAMAÑO PERFECTO ANTES DE CREAR LA REVISTA
+  // 3. LA CLAVE: CALCULAR EL TAMAÑO PERFECTO Y REDONDEADO (Sin decimales)
   function calcularTamañoHD() {
     const esMovil = $(window).width() < 768;
     const ww = $(window).width();
     const wh = $(window).height();
 
-    // En móvil usa el 95% del ancho. En PC el 90%. Dejamos margen arriba y abajo (0.75)
     const maxW = ww * (esMovil ? 0.95 : 0.90);
     const maxH = wh * 0.75;
 
-    // Proporciones matemáticas de tu diseño
     const ratio = esMovil ? (400 / 565) : (800 / 565);
 
-    let w = maxW;
-    let h = w / ratio;
+    // EL SECRETO: Usamos Math.round() para que nunca haya píxeles con decimales
+    let w = Math.round(maxW);
+    let h = Math.round(w / ratio);
 
-    // Si nos pasamos de altura, lo ajustamos al máximo permitido
     if (h > maxH) {
-      h = maxH;
-      w = h * ratio;
+      h = Math.round(maxH);
+      w = Math.round(h * ratio);
     }
 
     return { ancho: w, alto: h, display: esMovil ? 'single' : 'double' };
   }
 
-  // 4. INICIO Y MOTOR GRÁFICO (Sin fallos)
+  // 4. INICIO Y MOTOR GRÁFICO
   $('#btn-entrar').click(function() {
     document.getElementById('audio-fondo').play();
     const elem = document.documentElement;
     if (elem.requestFullscreen) elem.requestFullscreen().catch(err => {});
     else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
 
-    // Le damos 500ms al móvil para que haga la pantalla completa antes de medir
     setTimeout(function() {
       $('#pantalla-carga').fadeOut(800, function() {
         $('#contenedor-revista').css({ display: 'flex', opacity: 0 });
 
-        // A. Medimos la pantalla en este momento exacto
         const medidas = calcularTamañoHD();
 
-        // B. Creamos la revista UNA SOLA VEZ con la medida perfecta y el motor gráfico ON
         magazine.turn({
           width: medidas.ancho,
           height: medidas.alto,
           display: medidas.display,
-          acceleration: true, // SÚPER FLUIDO
+          acceleration: true, // Motor gráfico encendido para fluidez
           gradients: true,
           elevation: 50
         });
 
-        // C. Quitamos cualquier rastro de zoom falso para mantener el HD
         magazine.css({ 'transform': 'none', 'margin': 'auto' });
 
         magazine.bind('turning', function(event, page, view) {
