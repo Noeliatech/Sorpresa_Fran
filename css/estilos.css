@@ -66,8 +66,7 @@ p {
   box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
   transform-style: preserve-3d;
   margin: auto; /* Centra automáticamente el contenedor */
-  perspective: 1000px; /* Vital para el efecto 3D */
-  transition: transform 0.1s ease-out; /* Movimiento suave al seguir el ratón */
+
 }
 
 /* AJUSTE DE CADA PÁGINA (Actualizado para corregir el fantasma central) */

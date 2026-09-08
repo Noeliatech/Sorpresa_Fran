@@ -71,7 +71,10 @@ $(document).ready(function() {
           width: esMovil ? 400 : 800,
           height: 565,
           display: esMovil ? 'single' : 'double',
-          acceleration: true,
+
+          /* MAGIA: Si es móvil apaga el 3D, si es PC lo deja encendido */
+          acceleration: esMovil ? false : true,
+
           gradients: true,
           elevation: 50
         });
