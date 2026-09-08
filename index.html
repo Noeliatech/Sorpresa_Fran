@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Edición Coleccionista. Feliz cumpleaños Amor</title>
+
+  <!-- Librerías necesarias para que la revista pase páginas -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://rawcdn.githack.com/blasten/turn.js/master/turn.min.js"></script>
+
+  <!-- Aquí conectaremos nuestro futuro diseño -->
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<!-- 1. PANTALLA DE ADUANAS (El giro de guion inicial) -->
+<!-- 1. PANTALLA DE ADUANAS -->
+<div id="pantalla-aduanas">
+  <h2>⚠️ AVISO URGENTE</h2>
+  <p id="texto-aduanas">Cargando aviso...</p> <!-- CAMBIADO AQUÍ -->
+  <p style="font-size: 0.9em; opacity: 0.6; margin-top: -10px;">(Pero no te preocupes, tenemos un plan B)</p>
+  <button id="btn-siguiente">VER ALTERNATIVA DIGITAL</button>
+</div>
+
+<!-- 2. PANTALLA DE CARGA ÉPICA (Oculta al principio) -->
+<div id="pantalla-carga" style="display: none;">
+  <h2>Edición Coleccionista</h2>
+  <p id="subtitulo-carga">Preparando la experiencia cinematográfica...</p>
+  <button id="btn-entrar">ENTRAR A LA EXPERIENCIA</button>
+</div>
+
+<!-- Reproductor de audio oculto -->
+<audio id="audio-fondo" loop>
+  <source src="assets/musica.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="audio-pagina">
+  <source src="assets/pagina.mp3" type="audio/mpeg">
+</audio>
+<audio id="audio-voz">
+  <source src="assets/voz.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 2. La Revista (Estará oculta hasta que termine de cargar) -->
+<div id="contenedor-revista" style="display: none;">
+  <h1>¡Feliz Cumpleaños Amor! 🎫</h1>
+  <h2>Espero que te guste tanto como a mi prepararlo. 🎫</h2>
+  <p>Usa las flechas del teclado o el ratón para pasar las páginas...</p>
+
+  <div id="magazine">
+    <!-- Las 54 imágenes se cargarán aquí automáticamente -->
+  </div>
+</div>
+
+<!-- Aquí conectaremos nuestra lógica de programación -->
+<script src="js/motor.js"></script>
+
+</body>
+</html>
