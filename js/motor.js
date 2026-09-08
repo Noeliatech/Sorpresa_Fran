@@ -32,10 +32,19 @@ $(document).ready(function() {
     magazine.append(`<div class="page" style="background-image:url('img/paginas/${i}.jpg');"></div>`);
   }
 
+// 2. Función matemática de escala (Responsive Corregido)
   function adaptarPantalla() {
-    const anchoVentana = $(window).width() * 0.9;
-    const altoVentana = $(window).height() * 0.8;
-    const anchoRevista = 800;
+    const esMovil = $(window).width() < 768;
+
+    // En móvil usamos el 95% de la pantalla para que sea GIGANTE, en PC el 90%
+    const porcentajeAncho = esMovil ? 0.95 : 0.9;
+    const porcentajeAlto = esMovil ? 0.90 : 0.8;
+
+    const anchoVentana = $(window).width() * porcentajeAncho;
+    const altoVentana = $(window).height() * porcentajeAlto;
+
+    // LA CLAVE: Si es móvil, la base es 400. Si es PC, es 800.
+    const anchoRevista = esMovil ? 400 : 800;
     const altoRevista = 565;
 
     let escala = Math.min(anchoVentana / anchoRevista, altoVentana / altoRevista);

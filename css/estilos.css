@@ -140,11 +140,7 @@ p {
 
 /* AJUSTE RESPONSIVE MÓVIL PARA EL CONTENEDOR */
 @media screen and (max-width: 768px) {
-  #magazine {
-    width: 100% !important;
-    max-width: 400px;
-    height: auto;
-  }
+  /* Hemos borrado la regla de #magazine de aquí para dejar que el JS la haga gigante */
 
   #contenedor-revista h1 {
     font-size: 1.3rem;
