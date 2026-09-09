@@ -95,11 +95,22 @@ $(document).ready(function() {
           if (promesa !== undefined) {
             promesa.catch(error => { });
           }
+          // SI LLEGA A LA ÚLTIMA PÁGINA (54), reproducimos tu mensaje de voz
           if (page === 54) {
             const audioVoz = document.getElementById('audio-voz');
+            const audioMusica = document.getElementById('audio-fondo');
+
+            // 1. Bajamos el volumen de Hans Zimmer al 20% para que no tape tu voz
+            audioMusica.volume = 0.2;
+
+            // 2. Esperamos 1 segundo y reproducimos tu nota de voz
             setTimeout(() => {
               audioVoz.play().catch(e => {});
             }, 1000);
+
+          } else {
+            // Si Fran retrocede a cualquier otra página, la música vuelve a estar a tope (100%)
+            document.getElementById('audio-fondo').volume = 1.0;
           }
         });
 
